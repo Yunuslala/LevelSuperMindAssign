@@ -1,18 +1,18 @@
 const { DataTypes } = require('sequelize');
-const { connection } = require('../configs/connection');
-const {UserModel} = require('./user.model');
+const { connection } = require('../config/db');
 
-const BlogsModel = connection.define('Blogs', {
+
+const BlogsModel = connection.define('BlogsModel', {
     title: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    content: {
+    Content: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
 
-    Type: {
+    Description: {
         type: DataTypes.STRING
     },
     createdAt: {
@@ -25,22 +25,16 @@ const BlogsModel = connection.define('Blogs', {
         allowNull: false,
         defaultValue: DataTypes.NOW,
     },
-
     userId: {
         type: DataTypes.INTEGER,
-        references: {
-            model: User,
-            key: 'id'
-        }
     },
+    isBlocked:{
+        type:DataTypes.BOOLEAN,
+        default:false
+      }
 });
 
 
-UserModel.hasMany(BlogsModel, {
-    foreignKey: 'userId', 
-});
-BlogsModel.belongsTo(UserModel, {
-    foreignKey: 'userId',
-});
+
 
 module.exports = {BlogsModel};

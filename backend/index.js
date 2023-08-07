@@ -11,7 +11,9 @@ const {AdminRouter}=require("./routers/admin.route");
 require('dotenv').config()
 app.use(cors());
 app.use(express.json());
-
+app.get("/",(req,res)=>{
+    res.status(200).send({"msg":"depolyed successfully"})
+})
 app.use("/user",UserRouter);
 app.use("/Comments",CommentRouter);
 app.use("/Blogs",BlogRouter);
@@ -20,13 +22,8 @@ app.use("/Admin",AdminRouter);
 
 
 
-
-app.listen(process.env.port||5000,async()=>{
-    try {
-        await connection
-        console.log("rds is connected")
-    } catch (error) {
-        console.log("rds is not coonected")
-    }
-    console.log(`http://localhost:5000`)
+connection.sync().then(() => {
+    app.listen(process.env.port, () => {
+        console.log('Server is listening to the port : 3002');
+    })
 })

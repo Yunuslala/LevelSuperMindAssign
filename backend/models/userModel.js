@@ -1,50 +1,39 @@
 const { DataTypes } = require('sequelize');
-const { connection } = require('../configs/connection');
+const { connection } = require('../config/db');
 
-// Define the User model with the required fields
-const UserModel = connection.define('users', {
-  // First name of the user
- Name:{
+const Users = connection.define('Users', {
+
+ name:{
     type:DataTypes.STRING,
     allowNull:false,
  },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    validate:{
-        isEmail:true
-    },
     unique:true
   },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  Mobile:{
-    type:DataTypes.INTEGER,
-    validate:{
-        isNumber(value){
-           const mobileNumberPattern = /^[1-9]\d{9}$/;
-           if(!mobileNumberPattern.test(value)){
-            throw new err("number is not valid give 10 digit")
-           }
-        }
-    }
-  },
   age: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
   gender: {
-    type: DataTypes.ENUM('male', 'female', 'other'),
+    type: DataTypes.STRING,
     allowNull: false,
   },
   role: {
-    type: DataTypes.ENUM('admin', 'user','author'),
+    type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'user', 
+    default: 'user', 
   },
+  isBlocked:{
+    type:DataTypes.BOOLEAN,
+    default:false
+  }
 });
 
 // Export the User model for use in other parts of the application
-module.exports = { UserModel};
+module.exports = {Users};

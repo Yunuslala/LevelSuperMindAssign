@@ -1,9 +1,8 @@
 const { DataTypes } = require('sequelize');
-const { connection } = require('../configs/connection');
-const {BlogsModel} = require('./blog.model');
-const { UserModel } = require('./user.model');
+const { connection } = require('../config/db');
 
-const CommentModel = connection.define('comments', {
+
+const CommentModel = connection.define('CommentsModel', {
     comments: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -15,30 +14,20 @@ const CommentModel = connection.define('comments', {
     },
     userId: {
         type: DataTypes.INTEGER,
-        references: {
-            model: UserModel,
-            key: 'id'
-        }
     },
     blogsId: {
         type: DataTypes.INTEGER,
-        references: {
-            model: BlogsModel,
-            key: 'id'
-        }
     },
     isAvailable:{
         type:DataTypes.BOOLEAN,
         default:true
+    },
+    isBlocked:{
+        type:DataTypes.BOOLEAN,
+        default:false
     }
 });
 
-// Create associations between models
-CommentModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
-CommentModel.belongsTo(BlogsModel, { foreignKey: 'blogsId', as: 'Blogs' });
 
-// Define hasMany associations for User and BlogPost models
-UserModel.hasMany(CommentModel, { foreignKey: 'userId', as: 'comments' });
-BlogsModel.hasMany(CommentModel, { foreignKey: 'blogsId', as: 'comments' });
 
 module.exports = { CommentModel};
